@@ -1,4 +1,4 @@
-import { Button, Input } from 'antd';
+import { Button, Col, Input, Row } from 'antd';
 import React from 'react';
 
 const TaskInput = ({ saveTaskToList, deleteAll }) => {
@@ -13,22 +13,29 @@ const TaskInput = ({ saveTaskToList, deleteAll }) => {
     }
   }
   return (
-    <div>
+    <div className="d-md-flex">
       <Input
+        className="flex--grow-1 mr-md-2 mt-1"
         value={task}
         onKeyDown={saveText}
         onChange={taskHandle}
         placeholder="Enter your task"
-        style={{ width: 500, paddingInline: 10 }}
+        style={{ width: '100%' }}
       />
-      <Button
-        onClick={saveText}
-        style={{ width: 100, marginInline: 10 }}
-      >Add</Button>
-      <Button
-        onClick={deleteAll}
-        style={{ width: 100,  }}
-      >Delete all</Button>
+      <div className="d-flex">
+        <div className="mt-1">
+          <Button
+            onClick={saveText}
+          >Add</Button>
+
+        </div>
+        <div className="ml-1 mt-1">
+          <Button
+            onClick={deleteAll}
+          >Delete all</Button>
+        </div>
+      </div>
+
     </div>
   );
 };
