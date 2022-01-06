@@ -1,10 +1,12 @@
 import './App.css';
-import UseCallback from './Lessons/Advanced/Hooks/UseCallback';
+import Closure from './JavaScriptsAdvance/closure';
+import TypeCheck from './JavaScriptsAdvance/typeCheck';
+// import TodoList from './MiniProjects/TodoList';
 
 function App() {
   return (
     <div >
-      <UseCallback />
+      <Closure />
     </div>
   );
 }

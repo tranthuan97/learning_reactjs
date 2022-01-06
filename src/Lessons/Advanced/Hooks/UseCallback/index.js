@@ -1,95 +1,65 @@
-import React from 'react';
-import Login from './components/Login';
-import Register from './components/Register';
-import TaskInput from './components/TaskInput';
-import TaskList from './components/TaskList';
-import Notification from './components/Notification'
-import { LoginOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
+import React, { useDebugValue } from 'react';
 
-const UseCallback = props => {
-  const [listItem, setListItem] = React.useState([]);
-  const [isLogin, setLogin] = React.useState(true)
-  const [accounts, setAccounts] = React.useState([])
-  const [isRegister, setIsRegister] = React.useState(false);
-  const [rememberLog, setRememberLog] = React.useState({
-    isRemember: false,
-    account: null
-  })
+const UseCallbackExample = props => {
+  const [count, setCount] = React.useState(0);
+  const [countWithRef, setCountWithRef] = React.useState(0);
+  const [countWithNoRef, setCountWithNoRef] = React.useState(0);
 
-  const saveTask = (task) => {
-    const data = [...listItem]
-    const date = new Date();
-    const time = date.getHours() + ':' + date.getMinutes()
-    const fullday = date.getDate() + '/' + date.getMonth() + '/' + date.getFullYear()
-    data.unshift({ date: time + ' - ' + fullday, taskName: task, active: true });
-    setListItem(data);
-    Notification("success", 'Thành công', 'Thêm dữ liệu thành công !')
-  }
-  const deleteAll = (task) => {
-    if (listItem.length > 0) {
-      setListItem([]);
-      return Notification("warning", 'Thành công', 'Xóa tất cả thành công !')
-    }
-    Notification("warning", 'Cảnh báo', 'Không có dữ liệu nào để xóa !')
+  const increaseRef = React.useCallback(() => {
+    setCountWithRef(countWithRef + 1)
+  }, [countWithRef]);
+
+  const increaseNoRef = React.useCallback(() => {
+    setCountWithNoRef(countWithNoRef + 1);
+  }, []);
+
+  const increase = () => {
+    setCount(count + 1)
   }
 
-  const deleteTask = (index) => {
-    listItem.splice(index, 1);
-    const data = [...listItem]
-    setListItem(data);
-    Notification("warning", 'Thành công', 'Xóa công việc thành công !')
-  }
+  const decreaseRef = React.useCallback(() => {
+    setCountWithRef(countWithRef - 1)
+  }, [countWithRef]);
 
-  const action = (index, active) => {
-    const data = [...listItem]
-    data[index].active = active
-    setListItem(data);
-    if (active) {
-      Notification("info", 'Thành công', 'Kích hoạt thành công !')
-    } else {
-      Notification("error", 'Thành công', 'Đã hủy kích hoạt !')
-    }
-  }
+  const decreaseNoRef = React.useCallback(() => {
+    setCountWithNoRef(countWithNoRef - 1);
+  }, []);
 
-  const logout = () => {
-    setLogin(false)
-    Notification("success", 'Chúc mừng', 'Đăng xuất thành công .')
+  const decrease = () => {
+    setCount(count - 1);
   }
 
   return (
-    <div style={{ width: '100%', paddingInline: 20 }}>
-      {isLogin ?
-        <div className="d-flex flex-column justify-content-center flex-grow-1 pt-3">
-          <div className="d-flex justify-content-between">
-            <h3>Todo list</h3>
-            <span>
-              <Button onClick={logout}>Logout <LoginOutlined /></Button>
-            </span>
-          </div>
-          <TaskInput saveTaskToList={saveTask} deleteAll={deleteAll} />
-          <TaskList
-            listTasks={listItem}
-            deleteTask={deleteTask}
-            action={action} />
-        </div> :
-        <div className="d-flex flex-lg-row flex-column align-items-lg-stretch align-items-center justify-content-center">
-            <Register
-              accounts={accounts}
-              setAccounts={setAccounts}
-              setIsRegister={setIsRegister} />
-            <Login
-              accounts={accounts}
-              setLogin={setLogin}
-              isRegister={isRegister}
-              setIsRegister={setIsRegister}
-              rememberLog={rememberLog}
-              setRememberLog={setRememberLog}
-            />
-        </div>
-      }
+    <div style={{ textAlign: 'center' }}>
+      <h3>Đây là ví dụ về useCallback !</h3>
+      <small>Trả về function đã được cache khi tham chiếu phụ thuộc không thay đổi</small>
+      <p>
+        Nào ta cùng đếm ~
+      </p>
+      <div>
+        <p>Có sử dụng useCallback với tham chiếu truyền vào: <span style={{ fontWeight: 600 }}>{countWithRef}</span></p>
+        <p>Có sử dụng useCallback với không có tham chiếu truyền vào: <span style={{ fontWeight: 600 }}>{countWithNoRef}</span></p>
+        <p>Không sử dụng useCallback: <span style={{ fontWeight: 600 }}>{count}</span></p>
+      </div>
+      <div>
+        <Button onClick={() => {
+          increaseRef();
+          increaseNoRef();
+          increase();
+        }}>
+          Tăng
+        </Button>
+        <Button onClick={() => {
+          decreaseRef();
+          decreaseNoRef();
+          decrease();
+        }}>
+          Giảm
+        </Button>
+      </div>
     </div>
   );
 };
 
-export default UseCallback;
+export default UseCallbackExample;
