@@ -2,6 +2,7 @@
 import './App.css';
 import { Link, Route, Routes } from 'react-router-dom';
 import routes from './routes';
+import TodoList from 'MiniProjects/TodoList';
 
 function App() {
   const renderRoutes = (item, index) => {
@@ -26,6 +27,7 @@ function App() {
       <div className='m-3'>
         <Routes>
           {routes.map(renderRoutes)}
+          <Route path={'/todo-app'} element={<TodoList />} />
         </Routes>
       </div>
     </div>

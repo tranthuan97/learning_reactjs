@@ -6,29 +6,24 @@ import TaskList from './components/TaskList';
 import Notification from './components/Notification'
 import { LoginOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
+import { useDispatch, useSelector } from 'react-redux';
+import { addItemAction, loginAction } from 'MiniProjects/TodoList/todoListSlice';
 
 const TodoList = props => {
-  const [listItem, setListItem] = React.useState([]);
-  const [isLogin, setLogin] = React.useState(false)
-  const [accounts, setAccounts] = React.useState([])
-  const [isRegister, setIsRegister] = React.useState(false);
-  const [rememberLog, setRememberLog] = React.useState({
-    isRemember: false,
-    account: null
-  })
-
+  const dispatch = useDispatch();
+  const { accounts, isRegister, isLogin, listItem, rememberLog } = useSelector(state => state.todolist)
   const saveTask = (task) => {
     const data = [...listItem]
     const date = new Date();
     const time = date.getHours() + ':' + date.getMinutes()
     const fullday = date.getDate() + '/' + date.getMonth() + '/' + date.getFullYear()
     data.unshift({ date: time + ' - ' + fullday, taskName: task, active: true });
-    setListItem(data);
+    dispatch(addItemAction(data))
     Notification("success", 'Thành công', 'Thêm dữ liệu thành công !')
   }
   const deleteAll = (task) => {
     if (listItem.length > 0) {
-      setListItem([]);
+      dispatch(addItemAction([]))
       return Notification("warning", 'Thành công', 'Xóa tất cả thành công !')
     }
     Notification("warning", 'Cảnh báo', 'Không có dữ liệu nào để xóa !')
@@ -37,14 +32,14 @@ const TodoList = props => {
   const deleteTask = (index) => {
     listItem.splice(index, 1);
     const data = [...listItem]
-    setListItem(data);
+    dispatch(addItemAction(data))
     Notification("warning", 'Thành công', 'Xóa công việc thành công !')
   }
 
   const action = (index, active) => {
     const data = [...listItem]
     data[index].active = active
-    setListItem(data);
+    dispatch(addItemAction(data))
     if (active) {
       Notification("info", 'Thành công', 'Kích hoạt thành công !')
     } else {
@@ -53,7 +48,7 @@ const TodoList = props => {
   }
 
   const logout = () => {
-    setLogin(false)
+    dispatch(loginAction(false));
     Notification("success", 'Chúc mừng', 'Đăng xuất thành công .')
   }
 
@@ -74,18 +69,14 @@ const TodoList = props => {
             action={action} />
         </div> :
         <div className="d-flex flex-lg-row flex-column align-items-lg-stretch align-items-center justify-content-center">
-            <Register
-              accounts={accounts}
-              setAccounts={setAccounts}
-              setIsRegister={setIsRegister} />
-            <Login
-              accounts={accounts}
-              setLogin={setLogin}
-              isRegister={isRegister}
-              setIsRegister={setIsRegister}
-              rememberLog={rememberLog}
-              setRememberLog={setRememberLog}
-            />
+          <Register
+            accounts={accounts}
+          />
+          <Login
+            accounts={accounts}
+            isRegister={isRegister}
+            rememberLog={rememberLog}
+          />
         </div>
       }
     </div>

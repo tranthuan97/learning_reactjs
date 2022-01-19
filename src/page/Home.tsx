@@ -8,7 +8,7 @@ const Home = () => {
 
   const renderCardLink = (item: any, index: number) => {
     if (item.display === 'none') return '';
-    return <Col><CardLink key={index} title={item.name} coverImg={item.img} path={item.path} avatar={''} description={''} style={{}} action={undefined} /></Col>
+    return <Col key={index}><CardLink title={item.name} coverImg={item.img} path={item.path} avatar={''} description={''} style={{}} action={undefined} /></Col>
   }
 
   return (

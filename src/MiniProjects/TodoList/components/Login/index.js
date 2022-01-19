@@ -2,19 +2,26 @@ import React from 'react';
 import { Button, Card, Input, Form, Checkbox } from 'antd';
 import { CardBody, CardHeader } from 'reactstrap';
 import openNotification from '../Notification';
+import { loginAction, setRememberLogAction } from 'MiniProjects/TodoList/todoListSlice';
+import { useDispatch } from 'react-redux';
 
-const Login = ({ setLogin, accounts, isRegister, setIsRegister, rememberLog, setRememberLog }) => {
-  const formRef = React.useRef();
+const Login = ({ accounts, isRegister, rememberLog }) => {
+  const dispatch = useDispatch();
+  const [form] = Form.useForm();
+
   const onFinish = (account) => {
+  console.log("🚀 ~ file: index.js ~ line 13 ~ onFinish ~ account", account)
     const { username, password, remember } = account;
     const isAvailable = accounts.find(x => x.username === username && x.password === password);
     if (isAvailable) {
-      setLogin(true);
-      if (remember) {
-        setRememberLog({ isRemember: true, account })
-      } else {
-        setRememberLog({ isRemember: false, account: null })
-      }
+      console.log(remember);
+      // dispatch(loginAction(true));
+      // console.log(account);
+      // if (remember) {
+      //   dispatch(setRememberLogAction({ rememberLog: { isRemember: true, account }, isRegister }))
+      // } else {
+      //   dispatch(setRememberLogAction({ rememberLog: { isRemember: false, account: null }, isRegister }))
+      // }
       openNotification("success", 'Chúc mừng', 'Đăng nhập thành công.')
     } else {
       openNotification("warning", 'Cảnh báo', 'Tài khoản hoặc mật khẩu không đúng !')
@@ -24,22 +31,22 @@ const Login = ({ setLogin, accounts, isRegister, setIsRegister, rememberLog, set
   React.useEffect(() => {
     if (isRegister) {
       const { username, password } = accounts[accounts.length - 1];
-      formRef.current.setFieldsValue({
+      form.setFieldsValue({
         username,
         password,
       });
-      setIsRegister(false);
-      setRememberLog({ isRemember: rememberLog.isRemember, account: { username, password, remember: rememberLog.isRemember } })
+      const account = { username, password, remember: rememberLog.isRemember }
+      dispatch(setRememberLogAction({ rememberLog: { isRemember: rememberLog.isRemember, account }, isRegister: false }))
     } else if (rememberLog.isRemember) {
       const { account } = rememberLog;
       const { username, password, remember } = account
-      formRef.current.setFieldsValue({
+      form.setFieldsValue({
         username,
         password,
         remember
       });
     }
-  }, [accounts, isRegister, rememberLog, setIsRegister, setRememberLog])
+  }, [accounts, dispatch, form, isRegister, rememberLog])
 
   return (
     <Card style={{ width: 500, marginInline: 5 }} className="my-2">
@@ -50,7 +57,7 @@ const Login = ({ setLogin, accounts, isRegister, setIsRegister, rememberLog, set
         <Form
           layout="vertical"
           name="basic"
-          ref={formRef}
+          form={form}
           initialValues={{ remember: true }}
           onFinish={onFinish}
           autoComplete="off"

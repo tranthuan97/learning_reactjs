@@ -2,9 +2,13 @@ import React from 'react';
 import { Button, Card, Input, Form } from 'antd';
 import { CardBody, CardHeader } from 'reactstrap';
 import openNotification from '../Notification';
+import { registerAction } from 'MiniProjects/TodoList/todoListSlice';
+import { useDispatch } from 'react-redux';
 
-const Register = ({ accounts, setAccounts, setIsRegister }) => {
-  const formRef = React.useRef();
+const Register = ({ accounts }) => {
+  const [form] = Form.useForm();
+  const dispatch = useDispatch();
+
   const onFinish = (account) => {
     const { username, password } = account;
     const validate = username.length < 6 || username.length < 6;
@@ -15,11 +19,8 @@ const Register = ({ accounts, setAccounts, setIsRegister }) => {
       if (validate) {
         openNotification("warning", 'Cảnh báo', 'Username & password dài tối thiểu 6 ký tự!')
       } else {
-        const acc = [...accounts];
-        acc.push({ username, password })
-        setAccounts(acc)
-        setIsRegister(true);
-        formRef.current.resetFields();
+        dispatch(registerAction({ username, password }));
+        form.resetFields();
         openNotification("success", 'Chúc mừng', 'Đăng ký thành công.')
       }
     }
@@ -32,9 +33,8 @@ const Register = ({ accounts, setAccounts, setIsRegister }) => {
       </CardHeader>
       <CardBody>
         <Form
-          ref={formRef}
+          form={form}
           layout="vertical"
-          name="basic"
           initialValues={{ remember: true }}
           onFinish={onFinish}
           autoComplete="off"
@@ -60,6 +60,7 @@ const Register = ({ accounts, setAccounts, setIsRegister }) => {
           <Form.Item
             label="Confirm password"
             name="confirmPassword"
+            dependencies={['password']}
             hasFeedback
             rules={[
               {
