@@ -17,17 +17,17 @@ function App() {
         <ul>
           <li>
             <Link style={{ padding: 0, margin: 0 }} to={'/'}>
-              <a className="active">
+              <p className="active m-0 p-3">
                 Home
-              </a>
+              </p>
             </Link>
           </li>
         </ul>
       </div>
       <div className='m-3'>
         <Routes>
-          {routes.map(renderRoutes)}
-          <Route path={'/todo-app'} element={<TodoList />} />
+          {/* {routes.map(renderRoutes)} */}
+          <Route path={'/'} element={<TodoList />} />
         </Routes>
       </div>
     </div>

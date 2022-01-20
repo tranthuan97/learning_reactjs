@@ -13,6 +13,7 @@ const openNotification = (type, message, alertDescription, className) => {
     },
     duration: 1,
     className,
+    style: { whiteSpace: 'nowrap', width: 'fit-content', minWidth: 400 },
     placement: "topLeft"
   });
 };

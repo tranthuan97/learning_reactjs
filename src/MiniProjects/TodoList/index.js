@@ -7,7 +7,7 @@ import Notification from './components/Notification'
 import { LoginOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { addItemAction, loginAction } from 'MiniProjects/TodoList/todoListSlice';
+import { addItemAction, loginAction, changeListItemsAction } from 'MiniProjects/TodoList/todoListSlice';
 
 const TodoList = props => {
   const dispatch = useDispatch();
@@ -16,7 +16,7 @@ const TodoList = props => {
     const data = [...listItem]
     const date = new Date();
     const time = date.getHours() + ':' + date.getMinutes()
-    const fullday = date.getDate() + '/' + date.getMonth() + '/' + date.getFullYear()
+    const fullday = date.getDate() + '/' + date.getMonth() + 1 + '/' + date.getFullYear()
     data.unshift({ date: time + ' - ' + fullday, taskName: task, active: true });
     dispatch(addItemAction(data))
     Notification("success", 'Thành công', 'Thêm dữ liệu thành công !')
@@ -30,16 +30,15 @@ const TodoList = props => {
   }
 
   const deleteTask = (index) => {
-    listItem.splice(index, 1);
-    const data = [...listItem]
+    const data = listItem.filter((x, i) => i !== index);
     dispatch(addItemAction(data))
     Notification("warning", 'Thành công', 'Xóa công việc thành công !')
   }
 
   const action = (index, active) => {
     const data = [...listItem]
-    data[index].active = active
-    dispatch(addItemAction(data))
+    data[index] = { ...data[index], active };
+    dispatch(changeListItemsAction(data))
     if (active) {
       Notification("info", 'Thành công', 'Kích hoạt thành công !')
     } else {

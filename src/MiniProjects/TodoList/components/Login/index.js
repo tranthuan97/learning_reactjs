@@ -10,18 +10,15 @@ const Login = ({ accounts, isRegister, rememberLog }) => {
   const [form] = Form.useForm();
 
   const onFinish = (account) => {
-  console.log("🚀 ~ file: index.js ~ line 13 ~ onFinish ~ account", account)
     const { username, password, remember } = account;
     const isAvailable = accounts.find(x => x.username === username && x.password === password);
     if (isAvailable) {
-      console.log(remember);
-      // dispatch(loginAction(true));
-      // console.log(account);
-      // if (remember) {
-      //   dispatch(setRememberLogAction({ rememberLog: { isRemember: true, account }, isRegister }))
-      // } else {
-      //   dispatch(setRememberLogAction({ rememberLog: { isRemember: false, account: null }, isRegister }))
-      // }
+      dispatch(loginAction(true));
+      if (remember) {
+        dispatch(setRememberLogAction({ rememberLog: { isRemember: true, account }, isRegister }))
+      } else {
+        dispatch(setRememberLogAction({ rememberLog: { isRemember: false, account: null }, isRegister }))
+      }
       openNotification("success", 'Chúc mừng', 'Đăng nhập thành công.')
     } else {
       openNotification("warning", 'Cảnh báo', 'Tài khoản hoặc mật khẩu không đúng !')
@@ -34,6 +31,7 @@ const Login = ({ accounts, isRegister, rememberLog }) => {
       form.setFieldsValue({
         username,
         password,
+        remember: true,
       });
       const account = { username, password, remember: rememberLog.isRemember }
       dispatch(setRememberLogAction({ rememberLog: { isRemember: rememberLog.isRemember, account }, isRegister: false }))
@@ -58,7 +56,6 @@ const Login = ({ accounts, isRegister, rememberLog }) => {
           layout="vertical"
           name="basic"
           form={form}
-          initialValues={{ remember: true }}
           onFinish={onFinish}
           autoComplete="off"
         >
@@ -79,7 +76,8 @@ const Login = ({ accounts, isRegister, rememberLog }) => {
           >
             <Input.Password />
           </Form.Item>
-          <Form.Item name="remember" valuePropName={rememberLog.isRemember && 'checked'} >
+          {rememberLog.isRemember}
+          <Form.Item name="remember" valuePropName={'checked'} >
             <Checkbox>Remember me</Checkbox>
           </Form.Item>
           <Form.Item >

@@ -35,9 +35,10 @@ const Register = ({ accounts }) => {
         <Form
           form={form}
           layout="vertical"
-          initialValues={{ remember: true }}
+          // initialValues={{ remember: true }}
           onFinish={onFinish}
           autoComplete="off"
+          
         >
           <Form.Item
             label="Username"

@@ -25,12 +25,15 @@ export const todoListSlice = createSlice({
       state.isRegister = action.payload.isRegister;
     },
     addItemAction: (state, action) => {
-      state.listItem.push(action.payload)
+      state.listItem = action.payload;
+    },
+    changeListItemsAction: (state, action) => {
+      state.listItem = action.payload
     },
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { registerAction, loginAction, logoutAction, setRememberLogAction, addItemAction } = todoListSlice.actions
+export const { registerAction, loginAction, logoutAction, setRememberLogAction, addItemAction, changeListItemsAction } = todoListSlice.actions
 
 export default todoListSlice.reducer
