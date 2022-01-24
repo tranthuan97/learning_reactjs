@@ -17,7 +17,7 @@ const TodoList = props => {
     const date = new Date();
     const time = date.getHours() + ':' + date.getMinutes()
     const fullday = date.getDate() + '/' + date.getMonth() + 1 + '/' + date.getFullYear()
-    data.unshift({ date: time + ' - ' + fullday, taskName: task, active: true });
+    data.unshift({ date: time + ' - ' + fullday, taskName: task.name, img: task.img, active: true });
     dispatch(addItemAction(data))
     Notification("success", 'Thành công', 'Thêm dữ liệu thành công !')
   }
